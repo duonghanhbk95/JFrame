@@ -240,7 +240,9 @@ public class JFrameStart extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finishActionPerformed
-        System.exit(0);
+        JFrameResult1 result = new JFrameResult1();
+        result.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_finishActionPerformed
 
     private void getDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getDataActionPerformed

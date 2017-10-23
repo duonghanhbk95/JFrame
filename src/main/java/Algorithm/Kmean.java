@@ -30,12 +30,12 @@ public class Kmean {
     DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
     DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
 
+ 
     public int NUM_CLUSTERS_MEANING = 0;
-
     public List<Point> meaning_points;
 
     public final List<Cluster> meaning_clusters;
-
+    public static int iteration = 0;
     public Kmean() {
         this.meaning_points = new ArrayList();
         this.meaning_clusters = new ArrayList();
@@ -106,7 +106,7 @@ public class Kmean {
 
     public void calculate() {
         boolean finish = false;
-        int iteration = 0;
+        
 
         // Add in new data, one at a time, recalculating centroids with each new one. 
         while (!finish) {

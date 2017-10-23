@@ -24,7 +24,8 @@ public class FrequencyKMean {
     public int NUM_CLUSTERS_FREQUENCY = 0;
     public List<Point> frequency_points;
     public final List<Cluster> frequency_clusters;
-
+    
+    
     public FrequencyKMean() {
         this.frequency_clusters = new ArrayList();
         this.frequency_points = new ArrayList();
