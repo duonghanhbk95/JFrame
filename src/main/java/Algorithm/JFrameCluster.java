@@ -8,7 +8,7 @@ package Algorithm;
 import ConnectDB.ConnectionDB;
 import ConnectDB.MyConstants;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
  */
 public class JFrameCluster extends javax.swing.JFrame {
 
+    public static boolean flagMeaning;
+    public static boolean flagFrequency;
     ConnectionDB connect = new ConnectionDB();
     DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
     DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
@@ -27,6 +29,8 @@ public class JFrameCluster extends javax.swing.JFrame {
      * Creates new form JFrameCluster
      */
     public JFrameCluster() {
+        setLocation(400, 200);
+        setResizable(false);
         initComponents();
     }
 
@@ -51,10 +55,20 @@ public class JFrameCluster extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         textNumber1 = new javax.swing.JTextField();
         textNumber2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnExecute = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -163,12 +177,12 @@ public class JFrameCluster extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jButton1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jButton1.setText("Thực Hiện");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnExecute.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnExecute.setText("Thực Hiện");
+        btnExecute.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnExecute.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnExecuteActionPerformed(evt);
             }
         });
 
@@ -193,7 +207,7 @@ public class JFrameCluster extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -212,7 +226,7 @@ public class JFrameCluster extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
@@ -231,9 +245,11 @@ public class JFrameCluster extends javax.swing.JFrame {
     Kmean k = new Kmean();
     FrequencyKMean fre = new FrequencyKMean();
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+    public void execute() {
+        flagMeaning = false;
+        flagFrequency = false;
         if (rdMeaning.isSelected()) {
+            flagMeaning = true;
             String str1 = textNumber1.getText();
             if ("".equals(str1)) {
                 JOptionPane.showMessageDialog(null, "Chọn số cụm", "Error", JOptionPane.ERROR_MESSAGE);
@@ -247,14 +263,15 @@ public class JFrameCluster extends javax.swing.JFrame {
                     if (k.NUM_CLUSTERS_MEANING > original.find().count()) {
                         JOptionPane.showMessageDialog(null, "Số cụm 1 lớn hơn số mô hình", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
+                        JOptionPane.showMessageDialog(null, "Đang tiến hành phân cụm", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                         k.execute1(centroid, vector);
-                        JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thong Bao", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Bao", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             }
 
         } else if (rdBoth.isSelected()) {
-
+            flagFrequency = true;
             String str1 = textNumber1.getText();
             String str2 = textNumber2.getText();
 
@@ -272,9 +289,10 @@ public class JFrameCluster extends javax.swing.JFrame {
                     if (k.NUM_CLUSTERS_MEANING > original.find().count()) {
                         JOptionPane.showMessageDialog(null, "Số cụm 1 lớn hơn số mô hình", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
+                        JOptionPane.showMessageDialog(null, "Đang tiến hành phân cụm", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                         k.execute1(centroid, vector);
                         fre.execute2(k.meaning_clusters, vector, centroid);
-                        JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thong Bao", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Báo", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             }
@@ -283,7 +301,30 @@ public class JFrameCluster extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Chọn số tầng muốn phân cụm", "Error", JOptionPane.WARNING_MESSAGE);
 
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
+    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
+
+        if (vector.find().count() == 0) {
+            execute();
+        } else {
+            int click = JOptionPane.showConfirmDialog(null, "Kết quả cũ sẽ bị xóa");
+            switch (click) {
+                case JOptionPane.YES_OPTION:
+                    centroid.drop();
+                    cluster.drop();
+                    vector.drop();
+                    execute();
+                    break;
+                case JOptionPane.NO_OPTION:
+                    JOptionPane.showMessageDialog(null, "Hủy thao tác");
+                    break;
+                default:
+                    this.setVisible(false);
+                    break;
+            }
+        }
+
+    }//GEN-LAST:event_btnExecuteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
@@ -293,13 +334,23 @@ public class JFrameCluster extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textNumber1ActionPerformed
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formComponentResized
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        if(original.find().count() == 0) {
+            JOptionPane.showMessageDialog(null, "Chưa có dữ liệu","Warning",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExecute;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

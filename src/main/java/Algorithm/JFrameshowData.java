@@ -49,6 +49,8 @@ public class JFrameshowData extends javax.swing.JFrame {
         this.model = model;
     }
     public JFrameshowData() {
+        setLocation(220, 75);
+        setResizable(false);
         initComponents();
         showData();
     }
@@ -197,6 +199,7 @@ public class JFrameshowData extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        Textpath.setText(JFrameinsertData.path);
+       Textpath.setEditable(false);
     }//GEN-LAST:event_formWindowOpened
 
     /**

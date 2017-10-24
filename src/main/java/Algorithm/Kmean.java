@@ -35,7 +35,7 @@ public class Kmean {
     public List<Point> meaning_points;
 
     public final List<Cluster> meaning_clusters;
-    public static int iteration = 0;
+    public static int iterationMeaning = 0;
     public Kmean() {
         this.meaning_points = new ArrayList();
         this.meaning_clusters = new ArrayList();
@@ -122,7 +122,7 @@ public class Kmean {
             calculateMeaningCentroids();
 
             plotMeaningClusters();
-            iteration++;
+            iterationMeaning++;
 
             List<Point> currentCentroids = getCentroids();
 
@@ -138,7 +138,7 @@ public class Kmean {
                 }
             }
             System.out.println("#################");
-            System.out.println("Iteration: " + iteration);
+            System.out.println("Iteration: " + iterationMeaning);
             System.out.println("Centroid distances: " + finishState);
 
             if (finishState == NUM_CLUSTERS_MEANING) {

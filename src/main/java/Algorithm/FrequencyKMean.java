@@ -25,7 +25,7 @@ public class FrequencyKMean {
     public List<Point> frequency_points;
     public final List<Cluster> frequency_clusters;
     
-    
+    public static int iterationFrequency = 0;
     public FrequencyKMean() {
         this.frequency_clusters = new ArrayList();
         this.frequency_points = new ArrayList();
@@ -66,6 +66,7 @@ public class FrequencyKMean {
             calculateFrequencyCentroids();
 
             plotFrequencyClusters();
+            iterationFrequency++;
             iteration++;
 
             List<Point> currentCentroids = getCentroids();
@@ -206,7 +207,6 @@ public class FrequencyKMean {
 
     public void insertClusterCol(Cluster meaning_cluster, Cluster frequency_cluster, DBCursor cursor) {
 
-        BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
 
         // find model which has id_model the same field into vector collection
         while (cursor.hasNext()) {

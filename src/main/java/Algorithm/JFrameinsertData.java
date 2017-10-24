@@ -5,13 +5,17 @@
  */
 package Algorithm;
 
+import ConnectDB.ConnectionDB;
+import ConnectDB.MyConstants;
 import QueryDB.Insert.InsertDB;
+import com.mongodb.DBCollection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -19,6 +23,9 @@ import javax.swing.Timer;
  * @author Hanh Nguyen
  */
 public class JFrameinsertData extends javax.swing.JFrame {
+
+    ConnectionDB connect = new ConnectionDB();
+    DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
 
     public static String path = null;
     public int percent = 0;
@@ -29,6 +36,8 @@ public class JFrameinsertData extends javax.swing.JFrame {
      * Creates new form JFrameinsertData
      */
     public JFrameinsertData() {
+        setLocation(400, 300);
+        setResizable(false);
         initComponents();
     }
 
@@ -36,8 +45,9 @@ public class JFrameinsertData extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-
+            
             int i = progressPercent.getValue();
+            
             if (i < progressPercent.getMaximum()) {
                 i++;
                 progressPercent.setValue(i);
@@ -165,9 +175,8 @@ public class JFrameinsertData extends javax.swing.JFrame {
         int rVal = chooser.showOpenDialog(null);
         if (rVal == JFileChooser.APPROVE_OPTION) {
             path = chooser.getSelectedFile().getAbsolutePath();
-
             jFramePath.setText(path);
-           
+            jFramePath.setEditable(false);
         }
 
     }//GEN-LAST:event_btnBrowseActionPerformed
@@ -178,15 +187,47 @@ public class JFrameinsertData extends javax.swing.JFrame {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
 
-        try {
+        
+        timer = new Timer(5, new progress());
+        if (path == null) {
+            JOptionPane.showMessageDialog(null, "Chưa nhập đường dẫn thư mục", "Error", JOptionPane.ERROR_MESSAGE);
 
-            timer.start();
-
-            insert.insert(path);
-
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            if (original.find().count() == 0) {
+                try {
+                    timer.start();
+                    insert.insert(path, original);
+                    
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                int click = JOptionPane.showConfirmDialog(null, "Bạn muốn xóa dữ liệu cũ không");
+                switch (click) {
+                    case JOptionPane.YES_OPTION:
+                        original.drop();
+                        JOptionPane.showMessageDialog(null, "Xóa thành công");
+                        timer.start();
+                        try {
+                            insert.insert(path, original);
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
+                        }   break;
+                    case JOptionPane.NO_OPTION:
+                        timer.start();
+                        try {
+                            insert.insert(path, original);
+                            JOptionPane.showMessageDialog(null, "Thêm thành công");
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
+                        }   break;
+                    default:
+                        this.setVisible(false);
+                        break;
+                }
+            }
         }
+        progressPercent.setValue(0);
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void progressPercentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_progressPercentStateChanged
@@ -194,7 +235,7 @@ public class JFrameinsertData extends javax.swing.JFrame {
     }//GEN-LAST:event_progressPercentStateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        timer = new Timer(5, new progress());
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed

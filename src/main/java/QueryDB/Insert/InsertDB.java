@@ -19,32 +19,25 @@ import org.json.simple.JSONArray;
  * @author Hanh Nguyen
  */
 public class InsertDB {
+    private int id_model;
+    
 
-    ConnectionDB connect = new ConnectionDB();
-    DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
-    DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
-    DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
-    DBCollection cluster = connect.connect(MyConstants.CLUSTER_COLLECTION_NAME);
-
-    public void insert(String path) throws UnknownHostException {
+    public void insert(String path, DBCollection original) throws UnknownHostException {
 
         //drop all collection
-        centroid.drop();
-        cluster.drop();
-        original.drop();
-        vector.drop();
+        
 
         // Insert Document 1
         ReadJSON js = new ReadJSON();
         JSONArray array = js.readFolder(path);
 
-        int i = 1;
+        id_model = original.find().count() + 1;
 
         for (Object obj : array) {
             BasicDBObject dbObject = (BasicDBObject) JSON.parse(obj.toString());
-            dbObject.append("id_model", i);
+            dbObject.append("id_model", id_model);
             original.insert(dbObject);
-            i++;
+            id_model++;
         }
 
         original.createIndex("id_model");
