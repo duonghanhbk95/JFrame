@@ -22,10 +22,7 @@ import javax.swing.table.TableModel;
  */
 public class JFrameResult2 extends javax.swing.JFrame {
 
-    private final ConnectionDB connect = new ConnectionDB();
-    private final DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
-    private final DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
-    private final DBCollection cluster = connect.connect(MyConstants.CLUSTER_COLLECTION_NAME);
+    Kmean k = new Kmean();
 
     private int totalModel;
     private int indexRowLevel1;
@@ -136,7 +133,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
 
     private void totalModel() {
         BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
-        DBCursor cursor1 = vector.find();
+        DBCursor cursor1 = k.vector.find();
         totalModel = cursor1.count();
         
         
@@ -146,13 +143,13 @@ public class JFrameResult2 extends javax.swing.JFrame {
         int count = 0;
         BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
         ArrayList<JFrameResult2> list = new ArrayList();
-        DBCursor cursorCentroid = centroid.find();
+        DBCursor cursorCentroid = k.centroid.find();
         JFrameResult2 jframe;
 
         while (cursorCentroid.hasNext()) {
             DBObject obj = cursorCentroid.next();
             whereVector.add("meaning_id", obj.get("meaning_id"));
-            count = vector.find(whereVector.get()).count();
+            count = k.vector.find(whereVector.get()).count();
 
             jframe = new JFrameResult2(Integer.parseInt(obj.get("meaning_id").toString()), obj.get("meaning_centroid").toString(), count, (double) (count * 100) / totalModel);
             list.add(jframe);
@@ -168,18 +165,18 @@ public class JFrameResult2 extends javax.swing.JFrame {
         whereVector.add("meaning_id", indexRowLevel1);
 
         ArrayList<JFrameResult2> list = new ArrayList();
-        DBCursor cursorCentroid = centroid.find(whereVector.get());
+        DBCursor cursorCentroid = k.centroid.find(whereVector.get());
         
-        total = vector.find(whereVector.get()).count();
+        total = k.vector.find(whereVector.get()).count();
         
         JFrameResult2 jframe;
         
-        int numFre = vector.distinct("frequency_id").size();
+        int numFre = k.vector.distinct("frequency_id").size();
         while (cursorCentroid.hasNext()) {
             DBObject obj = cursorCentroid.next();
             for (int i = 1; i <= numFre; i++) {
                 whereVector.add("frequency_id", i);
-                count = vector.find(whereVector.get()).count();
+                count = k.vector.find(whereVector.get()).count();
                 jframe = new JFrameResult2(i, obj.get("frequency_centroid " + i).toString(), count, (double) (count * 100) / total);
                 list.add(jframe);
             }
@@ -217,7 +214,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
         whereVector.add("meaning_id", indexRowLevel1);
         whereVector.add("frequency_id", indexRowLevel2);
         ArrayList<JFrameResult2> list = new ArrayList();
-        DBCursor cursor = cluster.find(whereVector.get());
+        DBCursor cursor = k.cluster.find(whereVector.get());
 
         JFrameResult2 jframe;
         while (cursor.hasNext()) {

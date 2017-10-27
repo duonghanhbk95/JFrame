@@ -16,7 +16,7 @@ public class JFrameStart extends javax.swing.JFrame {
      * Creates new form JFrameStart
      */
     public JFrameStart() {
-        setLocation(300, 50);
+        setLocation(300, 25);
         initComponents();
     }
 
@@ -250,7 +250,7 @@ public class JFrameStart extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(40, 40, 40))
         );
 
         pack();
@@ -292,6 +292,7 @@ public class JFrameStart extends javax.swing.JFrame {
 
     private void finish1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finish1ActionPerformed
         this.setVisible(false);
+        System.exit(0);
     }//GEN-LAST:event_finish1ActionPerformed
 
     /**

@@ -21,15 +21,16 @@ import java.util.List;
  *
  * @author Hanh Nguyen
  */
-public class Kmean {
+public class Kmean{
 //Number of Clusters. This metric should be related to the number of points
 
     // connect db
-    ConnectionDB connect = new ConnectionDB();
-    DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
-    DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
-    DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
-
+    public ConnectionDB connect = new ConnectionDB();
+    public DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
+    public DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
+    public DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
+    public DBCollection cluster = connect.connect(MyConstants.CLUSTER_COLLECTION_NAME);
+   
  
     public int NUM_CLUSTERS_MEANING = 0;
     public List<Point> meaning_points;
@@ -243,29 +244,47 @@ public class Kmean {
             }
         }
     }
-
+    
     // clustering level 1 based on meaning
     public void execute1(DBCollection centroid, DBCollection vector) {
+        long startVectorCol = System.currentTimeMillis();
         Vector vectorCol = new Vector();
         vectorCol.createCollectionVector(original, vector);
-        
-        
+        long endVectorCol = System.currentTimeMillis();
+     
+        long startinit = System.currentTimeMillis();
         DBCursor cursorMeaning = vector.find();
         initMeaningPoints(cursorMeaning);
+        long endinit = System.currentTimeMillis();
+        
+        long startCalculate = System.currentTimeMillis();
         calculate();
+        long endCalculate = System.currentTimeMillis();
+        
+      
+        
+        long startinsertMeaning = System.currentTimeMillis();
         insertMeaning_id(meaning_clusters, vector);
+        long endinsertMeaning = System.currentTimeMillis();
+       
         // creating table centroid
+        long startCentroid = System.currentTimeMillis();
         CollectionCentroid db = new CollectionCentroid();
         db.insertMeaningCentroid(meaning_clusters, centroid);
+        long endCentroid = System.currentTimeMillis();
+        
+        System.out.println("timeVector " + (endVectorCol - startVectorCol));
+        System.out.println("timeInit " + (endinit - startinit));
+        System.out.println("timeCalculate " + (endCalculate - startCalculate));
+        
+        System.out.println("timeinsertMeaning " + (endinsertMeaning - startinsertMeaning));
+        System.out.println("timeInsertCentroid " + (endCentroid - startCentroid));
+        System.out.println("total Tiem " + (endCentroid - startVectorCol));
     }
 
 //    public static void main(String[] args) {
-//
-//        Kmean k = new Kmean();
-//        k.execute1(centroid, vector);
-//
-//        FrequencyKMean a = new FrequencyKMean();
-//        a.execute2(k.meaning_clusters, vector, centroid);
-//
+//       java.awt.EventQueue.invokeLater(() -> {
+//           new JFrameStart().setVisible(true);
+//       });
 //    }
 }

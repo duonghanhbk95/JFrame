@@ -5,11 +5,15 @@
  */
 package Algorithm;
 
-import ConnectDB.ConnectionDB;
-import ConnectDB.MyConstants;
-import com.mongodb.DBCollection;
-import javax.swing.JFrame;
+import QueryDB.getData.Vector;
+import com.mongodb.DBCursor;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
@@ -19,11 +23,7 @@ public class JFrameCluster extends javax.swing.JFrame {
 
     public static boolean flagMeaning;
     public static boolean flagFrequency;
-    ConnectionDB connect = new ConnectionDB();
-    DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
-    DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
-    DBCollection original = connect.connect(MyConstants.ORIGINAL_MODEL_NAME);
-    DBCollection cluster = connect.connect(MyConstants.CLUSTER_COLLECTION_NAME);
+    
 
     /**
      * Creates new form JFrameCluster
@@ -32,6 +32,9 @@ public class JFrameCluster extends javax.swing.JFrame {
         setLocation(400, 200);
         setResizable(false);
         initComponents();
+
+        progressCluster.setStringPainted(true);
+        progressCluster.setForeground(Color.cyan);
     }
 
     /**
@@ -57,6 +60,7 @@ public class JFrameCluster extends javax.swing.JFrame {
         textNumber2 = new javax.swing.JTextField();
         btnExecute = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        progressCluster = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -195,6 +199,19 @@ public class JFrameCluster extends javax.swing.JFrame {
             }
         });
 
+        progressCluster.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        progressCluster.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        progressCluster.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                progressClusterStateChanged(evt);
+            }
+        });
+        progressCluster.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                progressClusterPropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -212,7 +229,9 @@ public class JFrameCluster extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progressCluster, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
@@ -224,10 +243,13 @@ public class JFrameCluster extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(progressCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -245,6 +267,35 @@ public class JFrameCluster extends javax.swing.JFrame {
     Kmean k = new Kmean();
     FrequencyKMean fre = new FrequencyKMean();
 
+    private Timer timer;
+
+    public class progress implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+
+            int i = progressCluster.getValue();
+
+            if (i < progressCluster.getMaximum()) {
+                i++;
+                progressCluster.setValue(i);
+                progressCluster.update(progressCluster.getGraphics());
+            } else {
+                timer.stop();
+            }
+        }
+    }
+
+    public void updateBar(int value) {
+        int i = progressCluster.getValue();
+        if (i < progressCluster.getMaximum()) {
+            i+= value;
+            progressCluster.setValue(i);
+            progressCluster.update(progressCluster.getGraphics());
+
+        }
+    }
+
     public void execute() {
         flagMeaning = false;
         flagFrequency = false;
@@ -260,11 +311,45 @@ public class JFrameCluster extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Số cụm phải lớn hơn 1");
                 } else {
 
-                    if (k.NUM_CLUSTERS_MEANING > original.find().count()) {
+                    if (k.NUM_CLUSTERS_MEANING > k.original.find().count()) {
                         JOptionPane.showMessageDialog(null, "Số cụm 1 lớn hơn số mô hình", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
+
+//                        JOptionPane.showInternalMessageDialog(progressCluster, "Dang phan");
                         JOptionPane.showMessageDialog(null, "Đang tiến hành phân cụm", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-                        k.execute1(centroid, vector);
+//                        k.execute1(centroid, vector);
+
+                        Vector vectorCol = new Vector();
+                        vectorCol.createCollectionVector(k.original, k.vector);
+
+                        updateBar(16);
+
+                        DBCursor cursorMeaning = k.vector.find();
+                        k.initMeaningPoints(cursorMeaning);
+
+                        updateBar(7);
+
+                        k.calculate();
+
+                        updateBar(30);
+                        try {
+                            Thread.sleep(2101);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(JFrameCluster.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        updateBar(20);
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(JFrameCluster.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        updateBar(26);
+                        k.insertMeaning_id(k.meaning_clusters, k.vector);
+
+                        // creating table centroid
+                        CollectionCentroid db = new CollectionCentroid();
+                        db.insertMeaningCentroid(k.meaning_clusters, k.centroid);
+                        updateBar(1);
                         JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Bao", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
@@ -286,12 +371,46 @@ public class JFrameCluster extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Số cụm phải lớn hơn 1");
                 } else {
 
-                    if (k.NUM_CLUSTERS_MEANING > original.find().count()) {
+                    if (k.NUM_CLUSTERS_MEANING > k.original.find().count()) {
                         JOptionPane.showMessageDialog(null, "Số cụm 1 lớn hơn số mô hình", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, "Đang tiến hành phân cụm", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
-                        k.execute1(centroid, vector);
-                        fre.execute2(k.meaning_clusters, vector, centroid);
+
+                        Vector vectorCol = new Vector();
+                        vectorCol.createCollectionVector(k.original, k.vector);
+
+                        updateBar(16);
+
+                        DBCursor cursorMeaning = k.vector.find();
+                        k.initMeaningPoints(cursorMeaning);
+
+                        updateBar(7);
+
+                        k.calculate();
+
+                        updateBar(30);
+                        try {
+                            Thread.sleep(2101);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(JFrameCluster.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        updateBar(20);
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(JFrameCluster.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                       
+                        k.insertMeaning_id(k.meaning_clusters, k.vector);
+
+                        // creating table centroid
+                        CollectionCentroid db = new CollectionCentroid();
+                        db.insertMeaningCentroid(k.meaning_clusters, k.centroid);
+                        
+                        
+                        fre.execute2(k.meaning_clusters, k.vector, k.centroid);
+                        updateBar(26);
+                        updateBar(1);
                         JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Báo", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
@@ -304,19 +423,26 @@ public class JFrameCluster extends javax.swing.JFrame {
     }
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
 
-        if (vector.find().count() == 0) {
+        
+        btnExecute.setEnabled(false);
+
+        if (k.vector.find().count() == 0) {
             execute();
+            btnExecute.setEnabled(true);
         } else {
             int click = JOptionPane.showConfirmDialog(null, "Kết quả cũ sẽ bị xóa");
             switch (click) {
                 case JOptionPane.YES_OPTION:
-                    centroid.drop();
-                    cluster.drop();
-                    vector.drop();
+
+                    k.centroid.drop();
+                    k.cluster.drop();
+                    k.vector.drop();
                     execute();
+                    btnExecute.setEnabled(true);
                     break;
                 case JOptionPane.NO_OPTION:
                     JOptionPane.showMessageDialog(null, "Hủy thao tác");
+                    btnExecute.setEnabled(true);
                     break;
                 default:
                     this.setVisible(false);
@@ -339,10 +465,20 @@ public class JFrameCluster extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        if(original.find().count() == 0) {
-            JOptionPane.showMessageDialog(null, "Chưa có dữ liệu","Warning",JOptionPane.WARNING_MESSAGE);
+        if (k.original.find().count() == 0) {
+            JOptionPane.showMessageDialog(null, "Chưa có dữ liệu", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void progressClusterStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_progressClusterStateChanged
+
+    }//GEN-LAST:event_progressClusterStateChanged
+
+    private void progressClusterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_progressClusterPropertyChange
+
+    }//GEN-LAST:event_progressClusterPropertyChange
 
     /**
      * @param args the command line arguments
@@ -359,6 +495,7 @@ public class JFrameCluster extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JProgressBar progressCluster;
     private javax.swing.JRadioButton rdBoth;
     private javax.swing.JRadioButton rdMeaning;
     private javax.swing.JTextField textNumber1;

@@ -224,20 +224,27 @@ public class FrequencyKMean {
     // clustering frequency 
 
     public void executeFrequency(DBCursor cursor) {
+    	
+    	
         initFrequencyPoints(cursor);
+        
         calculate();
+       
+        
     }
 // clustering level 2 based on frequency
 
     public void execute2(List<Cluster> meaning_clusters, DBCollection vector, DBCollection centroid) {
 
         CollectionCentroid db = new CollectionCentroid();
-
+        
+        
         for (Cluster cluster : meaning_clusters) {
             BasicDBObjectBuilder whereVector1 = BasicDBObjectBuilder.start();
             DBCursor cursor = vector.find(whereVector1.add("meaning_id", cluster.meaning_id + 1).get());
             
             executeFrequency(cursor);
+            
             
             insertFrequency_id(frequency_clusters, cluster, vector);
             db.insertFrequencyCentroid(cluster, frequency_clusters, centroid);
@@ -253,6 +260,7 @@ public class FrequencyKMean {
                 insertClusterCol(cluster, frequency_clusters.get(i), cursorVector);
 
             }
+           
 
         }
 

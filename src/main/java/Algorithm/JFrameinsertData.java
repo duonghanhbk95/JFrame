@@ -9,6 +9,7 @@ import ConnectDB.ConnectionDB;
 import ConnectDB.MyConstants;
 import QueryDB.Insert.InsertDB;
 import com.mongodb.DBCollection;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.UnknownHostException;
@@ -39,6 +40,9 @@ public class JFrameinsertData extends javax.swing.JFrame {
         setLocation(400, 300);
         setResizable(false);
         initComponents();
+        progressPercent.setStringPainted(true);
+        progressPercent.setForeground(Color.CYAN);
+        
     }
 
     public class progress implements ActionListener {
@@ -116,6 +120,8 @@ public class JFrameinsertData extends javax.swing.JFrame {
             }
         });
 
+        progressPercent.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        progressPercent.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         progressPercent.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 progressPercentStateChanged(evt);

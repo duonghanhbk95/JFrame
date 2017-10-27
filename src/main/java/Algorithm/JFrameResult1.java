@@ -20,10 +20,10 @@ import javax.swing.table.TableModel;
  * @author Hanh Nguyen
  */
 public class JFrameResult1 extends javax.swing.JFrame {
-
-    private final ConnectionDB connect = new ConnectionDB();
-    private final DBCollection vector = connect.connect(MyConstants.VECTOR_COLLECTION_NAME);
-    private final DBCollection centroid = connect.connect(MyConstants.CENTROID_COLLECTION_NAME);
+    
+    
+    Kmean k = new Kmean();
+    
 
     private int total;
     private int indexRow;
@@ -125,7 +125,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
     }
 
     private void totalModel() {
-        DBCursor cursor = vector.find();
+        DBCursor cursor = k.vector.find();
         total = cursor.count();
     }
 
@@ -133,7 +133,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
         BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
         whereVector.add("meaning_id", indexRow);
         ArrayList<JFrameResult1> list = new ArrayList();
-        DBCursor cursor = vector.find(whereVector.get());
+        DBCursor cursor = k.vector.find(whereVector.get());
 
         JFrameResult1 jframe;
         while (cursor.hasNext()) {
@@ -162,13 +162,13 @@ public class JFrameResult1 extends javax.swing.JFrame {
         int count = 0;
         BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
         ArrayList<JFrameResult1> list = new ArrayList();
-        DBCursor cursorCentroid = centroid.find();
+        DBCursor cursorCentroid = k.centroid.find();
         JFrameResult1 jframe;
 
         while (cursorCentroid.hasNext()) {
             DBObject obj = cursorCentroid.next();
             whereVector.add("meaning_id", obj.get("meaning_id"));
-            count = vector.find(whereVector.get()).count();
+            count = k.vector.find(whereVector.get()).count();
 
             jframe = new JFrameResult1(Integer.parseInt(obj.get("meaning_id").toString()), obj.get("meaning_centroid").toString(), count, (double) (count * 100) / total);
             list.add(jframe);
