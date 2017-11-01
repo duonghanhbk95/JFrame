@@ -10,8 +10,9 @@ package Algorithm;
  * @author Hanh Nguyen
  */
 public class JFrameStart extends javax.swing.JFrame {
-   
+
     private String path;
+
     /**
      * Creates new form JFrameStart
      */
@@ -257,26 +258,24 @@ public class JFrameStart extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResultActionPerformed
-        if(JFrameCluster.flagMeaning) {
+
+        if (JFrameCluster.flagMeaning) {
             JFrameResult1 result1 = new JFrameResult1();
             result1.setVisible(true);
-        }
-        else if(JFrameCluster.flagFrequency) {
+        } else if (JFrameCluster.flagFrequency) {
             JFrameResult2 result2 = new JFrameResult2();
             result2.setVisible(true);
-        }
-        else {
-            
+        } else {
+
             JFrameResult1 result1 = new JFrameResult1();
             result1.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_btnResultActionPerformed
 
     private void getDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getDataActionPerformed
-        JFrameinsertData get  = new JFrameinsertData();
+        JFrameinsertData get = new JFrameinsertData();
         get.setVisible(true);
-        
     }//GEN-LAST:event_getDataActionPerformed
 
     private void clusteringDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusteringDataActionPerformed
@@ -287,7 +286,7 @@ public class JFrameStart extends javax.swing.JFrame {
     private void showDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDataActionPerformed
         JFrameshowData show = new JFrameshowData();
         show.setVisible(true);
-        
+
     }//GEN-LAST:event_showDataActionPerformed
 
     private void finish1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finish1ActionPerformed
@@ -299,10 +298,10 @@ public class JFrameStart extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         JFrameStart start = new JFrameStart();
         start.setResizable(false);
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

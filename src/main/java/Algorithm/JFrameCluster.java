@@ -26,7 +26,6 @@ public class JFrameCluster extends javax.swing.JFrame {
 
     public static boolean flagMeaning;
     public static boolean flagFrequency;
-    
 
     /**
      * Creates new form JFrameCluster
@@ -267,8 +266,6 @@ public class JFrameCluster extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rdBothActionPerformed
 
-    
-
     private Timer timer;
 
     public class progress implements ActionListener {
@@ -291,24 +288,25 @@ public class JFrameCluster extends javax.swing.JFrame {
     public void updateBar(int value) {
         int i = progressCluster.getValue();
         if (i < progressCluster.getMaximum()) {
-            i+= value;
+            i += value;
             progressCluster.setValue(i);
             progressCluster.update(progressCluster.getGraphics());
 
         }
     }
-    
+
     public boolean checkElm(ArrayList<Cluster> meaning_cluster, int numCluster) {
-    	boolean flag = true;
-    	for(int i = 0; i < meaning_cluster.size(); i++) {
-    		if(numCluster > meaning_cluster.get(i).getMeaningPoints().size()) {
-    			flag = false;
-    			return flag;
-    		}
-    		
-    	}
-    	return flag;
+        boolean flag = true;
+        for (int i = 0; i < meaning_cluster.size(); i++) {
+            if (numCluster > meaning_cluster.get(i).getMeaningPoints().size()) {
+                flag = false;
+                return flag;
+            }
+
+        }
+        return flag;
     }
+
     public void execute(Kmean k, FrequencyKMean fre) {
         flagMeaning = false;
         flagFrequency = false;
@@ -413,36 +411,33 @@ public class JFrameCluster extends javax.swing.JFrame {
                         } catch (InterruptedException ex) {
                             Logger.getLogger(JFrameCluster.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                       
+
                         k.insertMeaning_id(k.meaning_clusters, k.vector);
 
                         // creating table centroid
                         CollectionCentroid db = new CollectionCentroid();
                         db.insertMeaningCentroid(k.meaning_clusters, k.centroid);
-                        
-                        if(checkElm((ArrayList<Cluster>) k.meaning_clusters, fre.NUM_CLUSTERS_FREQUENCY) == false) {
-                        	int click = JOptionPane.showConfirmDialog(null, "Chọn lại số cụm 2");
-                        	if(click == JOptionPane.YES_OPTION) {
-                        		progressCluster.getValue();
-                        		progressCluster.setValue(0);
-                        		progressCluster.update(progressCluster.getGraphics());
-                        		textNumber1.setText("");
-                        		textNumber2.setText("");
-                        		
-                        	}
-                        	else {
-                        		JOptionPane.showMessageDialog(null, "Phân cụm thất bại","Error",JOptionPane.ERROR_MESSAGE);
-                                
-                        	}
-                        }
-                        else {
-                        	fre.execute2(k.meaning_clusters, k.vector, k.centroid);
+
+                        if (checkElm((ArrayList<Cluster>) k.meaning_clusters, fre.NUM_CLUSTERS_FREQUENCY) == false) {
+                            int click = JOptionPane.showConfirmDialog(null, "Chọn lại số cụm 2");
+                            if (click == JOptionPane.YES_OPTION) {
+                                progressCluster.getValue();
+                                progressCluster.setValue(0);
+                                progressCluster.update(progressCluster.getGraphics());
+                                textNumber1.setText("");
+                                textNumber2.setText("");
+
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Phân cụm thất bại", "Error", JOptionPane.ERROR_MESSAGE);
+
+                            }
+                        } else {
+                            fre.execute2(k.meaning_clusters, k.vector, k.centroid);
                             updateBar(26);
                             updateBar(1);
                             JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Báo", JOptionPane.PLAIN_MESSAGE);
                         }
-                        
-                        
+
                     }
                 }
             }
@@ -454,12 +449,12 @@ public class JFrameCluster extends javax.swing.JFrame {
     }
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
 
-    	Kmean k = new Kmean();
+        Kmean k = new Kmean();
         FrequencyKMean fre = new FrequencyKMean();
-        
+
         progressCluster.getValue();
-		progressCluster.setValue(0);
-		progressCluster.update(progressCluster.getGraphics());
+        progressCluster.setValue(0);
+        progressCluster.update(progressCluster.getGraphics());
         btnExecute.setEnabled(false);
 
         if (k.vector.find().count() == 0) {
@@ -490,6 +485,7 @@ public class JFrameCluster extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void textNumber1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumber1ActionPerformed
@@ -501,7 +497,7 @@ public class JFrameCluster extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    	Kmean k = new Kmean();
+        Kmean k = new Kmean();
         if (k.original.find().count() == 0) {
             JOptionPane.showMessageDialog(null, "Chưa có dữ liệu", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
