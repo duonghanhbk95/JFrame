@@ -42,7 +42,7 @@ public class Kmean{
         this.meaning_clusters = new ArrayList();
     }
 
-    public Point chooseCentroid(List<Point> points, List<Cluster> clusters, Comparation sml, int id) {
+    public Point chooseCentroidMeaning(List<Point> points, List<Cluster> clusters, Comparation sml, int id) {
         Point centroid1 = null;
         float min = Float.MAX_VALUE;
 
@@ -86,7 +86,7 @@ public class Kmean{
         //Set Centroids
         for (int i = 0; i < NUM_CLUSTERS_MEANING; i++) {
             Cluster cluster = new Cluster(i);
-            Point centroid2 = chooseCentroid(meaning_points, meaning_clusters, sml, i);
+            Point centroid2 = chooseCentroidMeaning(meaning_points, meaning_clusters, sml, i);
             cluster.setMeaningCentroid(centroid2);
             meaning_clusters.add(cluster);
 
@@ -243,6 +243,23 @@ public class Kmean{
                 System.out.println("-------------------------");
             }
         }
+    }
+    public void insertClusterColMeaning(List<Cluster> meaning_clusters, DBCollection vector, DBCollection model, DBCollection clusterCol) {
+    	for(Cluster cluster : meaning_clusters) {
+    		BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
+            whereVector.add("meaning_id", cluster.meaning_id + 1);
+            DBCursor cursorVector = vector.find(whereVector.get());
+            while(cursorVector.hasNext()) {
+            	BasicDBObjectBuilder whereModel = BasicDBObjectBuilder.start();
+                whereModel.add("id_model", cursorVector.next().get("id_model"));
+                DBCursor cursor2 = model.find(whereModel.get());
+
+                BasicDBObject values = (BasicDBObject) cursor2.next();
+                values.append("meaning_id", cluster.meaning_id + 1);
+                clusterCol.insert(values);
+            }
+    	}
+    	
     }
     
     // clustering level 1 based on meaning

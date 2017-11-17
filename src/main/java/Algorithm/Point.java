@@ -204,7 +204,7 @@ public class Point {
     }
 //    @Override
 //    public String toString() {
-//        return "(" + numGoal + "," + numTask + "," + numQuality + "," + numResource + "," + numlink + ")";
+//        return "(" + numGoal + "," + numTask + "," + numQuality + "," + numResource + "," + numLink + ")";
 //    }
 
     @Override

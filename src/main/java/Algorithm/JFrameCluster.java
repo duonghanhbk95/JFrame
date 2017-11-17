@@ -360,6 +360,7 @@ public class JFrameCluster extends javax.swing.JFrame {
                         // creating table centroid
                         CollectionCentroid db = new CollectionCentroid();
                         db.insertMeaningCentroid(k.meaning_clusters, k.centroid);
+                        k.insertClusterColMeaning(k.meaning_clusters, k.vector, k.original, k.cluster);
                         updateBar(1);
                         JOptionPane.showMessageDialog(null, "Phân cụm hoàn thành", "Thông Bao", JOptionPane.PLAIN_MESSAGE);
                     }

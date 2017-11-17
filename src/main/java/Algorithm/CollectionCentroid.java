@@ -29,7 +29,8 @@ public class CollectionCentroid {
             centroidField.append("quality", clusters.get(i).getMeaningCentroid().getQuality());
             centroidField.append("resource", clusters.get(i).getMeaningCentroid().getResource());
             dbObject.append("meaning_centroid", centroidField);
-
+            
+            dbObject.append("numberOfCluster2", 0);
             centroid.insert(dbObject);
 
         }
@@ -66,10 +67,14 @@ public class CollectionCentroid {
             newCentroid.append("frequency_centroid " + num, fre_centroid.get());
 
         }
-        
+        newCentroid.append("numberOfCluster2", frequency_clusters.size());
         // update centroid
-        newCentroidSet.put("$set", newCentroid);
-        
-        centroid.update(oldCentroid, newCentroidSet);
+        centroid.save(newCentroid);
+//        newCentroidSet.put("$set", newCentroid);
+//        
+//        
+//        
+//        
+//        centroid.update(oldCentroid, newCentroidSet);
     }
 }

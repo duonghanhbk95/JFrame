@@ -203,7 +203,8 @@ public class JFrameinsertData extends javax.swing.JFrame {
                 try {
                     timer.start();
                     insert.insert(path, original);
-                    
+                    JOptionPane.showMessageDialog(null, "Thêm thành công");
+                    btnOK.setEnabled(false);
                 } catch (UnknownHostException ex) {
                     Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -215,15 +216,23 @@ public class JFrameinsertData extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Xóa thành công");
                         timer.start();
                         try {
+                        	btnOK.setEnabled(false);
                             insert.insert(path, original);
+                            JOptionPane.showMessageDialog(null, "Thêm thành công");
+                            
+                            btnOK.setEnabled(true);
                         } catch (UnknownHostException ex) {
                             Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
                         }   break;
                     case JOptionPane.NO_OPTION:
                         timer.start();
                         try {
+                        	btnOK.setEnabled(false);
                             insert.insert(path, original);
+                            
                             JOptionPane.showMessageDialog(null, "Thêm thành công");
+                           
+                            btnOK.setEnabled(true);
                         } catch (UnknownHostException ex) {
                             Logger.getLogger(JFrameinsertData.class.getName()).log(Level.SEVERE, null, ex);
                         }   break;

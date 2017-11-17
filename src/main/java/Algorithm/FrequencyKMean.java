@@ -31,6 +31,36 @@ public class FrequencyKMean {
         this.frequency_points = new ArrayList();
     }
 
+    
+    public Point chooseCentroidFre(List<Point> points, List<Cluster> clusters,int id) {
+    	Point centroid1 = null;
+    	double max= Double.MIN_VALUE;
+    	
+    	if (clusters.isEmpty()) {
+            centroid1 = frequency_points.get(id);
+            return centroid1;
+
+        }
+    	int j = 1;
+    	for(Point point : points) {
+    		int i = 1;
+            System.out.println("point " + j + ":" + j);
+            double sum = 0;
+            for(Cluster cluster : clusters) {
+            	sum += Point.distanceFrequency(cluster.getFrequencyCentroid(), point);
+            	System.out.println("sum " + i + ": " + sum);
+                i++;
+            }
+            if (sum > max) {
+                max = sum;
+
+                System.out.println("max " + max);
+                centroid1 = point;
+            }
+            j++;
+    	}
+    	return centroid1;
+    }
     // init frequency points
     private void initFrequencyPoints(Cursor cursor) {
         try {
@@ -40,7 +70,7 @@ public class FrequencyKMean {
             for (int i = 0; i < NUM_CLUSTERS_FREQUENCY; i++) {
                 Cluster cluster = new Cluster(i);
                 Point centroid = frequency_points.get(i);
-
+                
                 cluster.setFrequencyCentroid(centroid);
                 frequency_clusters.add(cluster);
             }
@@ -221,6 +251,7 @@ public class FrequencyKMean {
         }
 
     }
+    
     // clustering frequency 
 
     public void executeFrequency(DBCursor cursor) {
