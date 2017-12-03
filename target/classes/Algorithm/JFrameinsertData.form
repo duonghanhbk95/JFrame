@@ -10,6 +10,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
     <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
   </Events>
   <AuxValues>
@@ -83,7 +84,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="T&#x1ead;p tin c&#x1ea7;n &#x111;&#x1ecd;c:"/>
+        <Property name="text" type="java.lang.String" value="Th&#x1b0; m&#x1ee5;c c&#x1ea7;n &#x111;&#x1ecd;c:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jFramePath">

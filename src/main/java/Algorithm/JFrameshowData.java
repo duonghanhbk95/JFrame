@@ -12,6 +12,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -98,6 +99,9 @@ public class JFrameshowData extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Du lieu phan tich");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -114,13 +118,18 @@ public class JFrameshowData extends javax.swing.JFrame {
                 "ID_Model", "Value"
             }
         ));
+        dataTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dataTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(dataTable);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel2.setText("Tập tin dữ liệu   :");
+        jLabel2.setText("Thư mục dữ liệu   :");
 
         Textpath.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +210,23 @@ public class JFrameshowData extends javax.swing.JFrame {
        Textpath.setText(JFrameinsertData.path);
        Textpath.setEditable(false);
     }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void dataTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataTableMouseClicked
+        int index = dataTable.getSelectedRow();
+        TableModel model1 = dataTable.getModel();
+        String value = (String) model1.getValueAt(index, 1);
+        int id1 = (int) model1.getValueAt(index, 0);
+        
+        
+        OriginalData data = new OriginalData(id1, value);
+        data.setVisible(true);
+        
+    }//GEN-LAST:event_dataTableMouseClicked
 
     /**
      * @param args the command line arguments

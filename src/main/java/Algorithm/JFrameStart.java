@@ -53,6 +53,11 @@ public class JFrameStart extends javax.swing.JFrame {
         setTitle("Phan Cum Du Lieu");
         setBackground(java.awt.SystemColor.info);
         setFocusableWindowState(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("PHÂN CỤM MÔ HÌNH ISTAR");
@@ -70,7 +75,7 @@ public class JFrameStart extends javax.swing.JFrame {
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel4.setText("Ứng dụng thuật toán Kmeans trong việc phân cụm dữ liệu mô hình iStar");
+        jLabel4.setText("  Ứng dụng thuật toán K-means trong việc phân cụm dữ liệu mô hình iStar");
         jLabel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel4.setName("name"); // NOI18N
 
@@ -266,9 +271,8 @@ public class JFrameStart extends javax.swing.JFrame {
             JFrameResult2 result2 = new JFrameResult2();
             result2.setVisible(true);
         } else {
-
-            JFrameResult1 result1 = new JFrameResult1();
-            result1.setVisible(true);
+            JFrameResult2 result2 = new JFrameResult2();
+            result2.setVisible(true);
         }
 
     }//GEN-LAST:event_btnResultActionPerformed
@@ -293,6 +297,10 @@ public class JFrameStart extends javax.swing.JFrame {
         this.setVisible(false);
         System.exit(0);
     }//GEN-LAST:event_finish1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

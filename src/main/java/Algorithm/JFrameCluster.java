@@ -71,6 +71,9 @@ public class JFrameCluster extends javax.swing.JFrame {
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -141,6 +144,12 @@ public class JFrameCluster extends javax.swing.JFrame {
         textNumber1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textNumber1ActionPerformed(evt);
+            }
+        });
+
+        textNumber2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textNumber2ActionPerformed(evt);
             }
         });
 
@@ -311,6 +320,7 @@ public class JFrameCluster extends javax.swing.JFrame {
         flagMeaning = false;
         flagFrequency = false;
         if (rdMeaning.isSelected()) {
+            textNumber2.setEditable(false);
             flagMeaning = true;
             String str1 = textNumber1.getText();
             if ("".equals(str1)) {
@@ -513,6 +523,15 @@ public class JFrameCluster extends javax.swing.JFrame {
     private void progressClusterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_progressClusterPropertyChange
 
     }//GEN-LAST:event_progressClusterPropertyChange
+
+    private void textNumber2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumber2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textNumber2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

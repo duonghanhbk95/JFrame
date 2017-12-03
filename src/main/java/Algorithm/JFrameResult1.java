@@ -146,7 +146,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
 
     private void showtableDetail() {
         ArrayList<JFrameResult1> list = dataListValue();
-        DefaultTableModel model = (DefaultTableModel) tableResult.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableResult1.getModel();
         model.setRowCount(0);
         Object[] row = new Object[3];
         for (int i = 0; i < list.size(); i++) {
@@ -216,16 +216,20 @@ public class JFrameResult1 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCentroid = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tableResult = new javax.swing.JTable();
+        tableResult1 = new javax.swing.JTable();
         btnfinish1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         totalModel1 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         Iteration1 = new javax.swing.JTextField();
         countCluster = new javax.swing.JTextField();
+        btnCentroid1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -266,7 +270,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableCentroid);
 
-        tableResult.setModel(new javax.swing.table.DefaultTableModel(
+        tableResult1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -282,7 +286,12 @@ public class JFrameResult1 extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tableResult);
+        tableResult1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableResult1MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tableResult1);
 
         btnfinish1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         btnfinish1.setText("Kết Thúc");
@@ -308,6 +317,15 @@ public class JFrameResult1 extends javax.swing.JFrame {
         countCluster.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         countCluster.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        btnCentroid1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnCentroid1.setText("Centroid");
+        btnCentroid1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCentroid1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCentroid1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -316,23 +334,20 @@ public class JFrameResult1 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(17, 17, 17))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnfinish1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnfinish1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCentroid1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(84, 84, 84)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Iteration1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(totalModel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(totalModel1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                            .addComponent(Iteration1))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -341,7 +356,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(countCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23))
+                .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
                 .addGap(397, 397, 397)
                 .addComponent(jLabel1)
@@ -364,17 +379,17 @@ public class JFrameResult1 extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnfinish1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(totalModel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Iteration1)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(totalModel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCentroid1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnfinish1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Iteration1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -397,7 +412,36 @@ public class JFrameResult1 extends javax.swing.JFrame {
         countCluster.setText(String.valueOf(indexRow));
         
         showtableDetail();
+//        int idCentroid = (int) model.getValueAt(index, 0);
+//        
+//        String value = (String) model.getValueAt(index, 1);
+//        DetailResultCentroid1 rs = new  DetailResultCentroid1(idCentroid, value);
+//        rs.setVisible(true);
     }//GEN-LAST:event_tableCentroidMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void tableResult1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableResult1MouseClicked
+        int index = tableResult1.getSelectedRow();
+        TableModel model = tableResult1.getModel();
+        
+        int idModel = (int) model.getValueAt(index, 0);
+        String valueModel = (String) model.getValueAt(index, 2);
+        
+        DetailModel1 rs = new DetailModel1(idModel, valueModel);
+        rs.setVisible(true);
+    }//GEN-LAST:event_tableResult1MouseClicked
+
+    private void btnCentroid1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCentroid1ActionPerformed
+        int item = k.centroid.find().count();
+        TableModel model = tableCentroid.getModel();
+        
+        DetailResultCentroid1 rs = new DetailResultCentroid1(item, model);
+        rs.setVisible(true);
+    }//GEN-LAST:event_btnCentroid1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -405,6 +449,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Iteration1;
+    private javax.swing.JButton btnCentroid1;
     private javax.swing.JButton btnfinish1;
     private javax.swing.JTextField countCluster;
     private javax.swing.JLabel jLabel1;
@@ -416,7 +461,7 @@ public class JFrameResult1 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tableCentroid;
-    private javax.swing.JTable tableResult;
+    private javax.swing.JTable tableResult1;
     private javax.swing.JTextField totalModel1;
     // End of variables declaration//GEN-END:variables
 }

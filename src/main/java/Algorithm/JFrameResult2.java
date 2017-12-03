@@ -23,7 +23,7 @@ import javax.swing.table.TableModel;
 public class JFrameResult2 extends javax.swing.JFrame {
 
     Kmean k = new Kmean();
-
+    
     private int totalModel;
     private int indexRowLevel1;
     private int indexRowLevel2;
@@ -135,8 +135,6 @@ public class JFrameResult2 extends javax.swing.JFrame {
         BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
         DBCursor cursor1 = k.vector.find();
         totalModel = cursor1.count();
-        
-        
     }
 
     private ArrayList<JFrameResult2> dataListCentroidLevel1() {
@@ -214,7 +212,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
         whereVector.add("meaning_id", indexRowLevel1);
         whereVector.add("frequency_id", indexRowLevel2);
         ArrayList<JFrameResult2> list = new ArrayList();
-        DBCursor cursor = k.cluster.find(whereVector.get());
+        DBCursor cursor = k.vector.find(whereVector.get());
 
         JFrameResult2 jframe;
         while (cursor.hasNext()) {
@@ -227,7 +225,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
 
     private void showtableDetail() {
         ArrayList<JFrameResult2> list = dataListValue();
-        DefaultTableModel model = (DefaultTableModel) tableDetaillevel.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableResult2.getModel();
         model.setRowCount(0);
         Object[] row = new Object[4];
         for (int i = 0; i < list.size(); i++) {
@@ -254,7 +252,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCentroidlevel1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tableDetaillevel = new javax.swing.JTable();
+        tableResult2 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -268,8 +266,14 @@ public class JFrameResult2 extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         totalModel2 = new javax.swing.JTextField();
         Iteration2 = new javax.swing.JTextField();
+        btnCentroid2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("THÔNG SỐ CÁC CỤM MỨC 1");
@@ -300,7 +304,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableCentroidlevel1);
 
-        tableDetaillevel.setModel(new javax.swing.table.DefaultTableModel(
+        tableResult2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -308,7 +312,12 @@ public class JFrameResult2 extends javax.swing.JFrame {
                 "ID_Model", "Meaning_id", "Frequency_id", "Value"
             }
         ));
-        jScrollPane2.setViewportView(tableDetaillevel);
+        tableResult2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableResult2MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tableResult2);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("CHI TIẾT CỤM");
@@ -377,6 +386,20 @@ public class JFrameResult2 extends javax.swing.JFrame {
 
         Iteration2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         Iteration2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Iteration2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Iteration2ActionPerformed(evt);
+            }
+        });
+
+        btnCentroid2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnCentroid2.setText("Centroid");
+        btnCentroid2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCentroid2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCentroid2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -390,21 +413,23 @@ public class JFrameResult2 extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnfinish2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(119, 119, 119)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnCentroid2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnfinish2, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(39, 39, 39)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(totalModel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Iteration2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Iteration2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                                    .addComponent(totalModel2))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -426,13 +451,14 @@ public class JFrameResult2 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5)
-                    .addComponent(countClusterLevel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(countClusterLevel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(countClusterLevel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)
+                        .addComponent(countClusterLevel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -442,14 +468,17 @@ public class JFrameResult2 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnfinish2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(totalModel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 1, Short.MAX_VALUE))
+                            .addComponent(totalModel2)
+                            .addComponent(btnCentroid2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Iteration2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(Iteration2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnfinish2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
                 .addGap(43, 43, 43))
         );
@@ -479,17 +508,59 @@ public class JFrameResult2 extends javax.swing.JFrame {
     }//GEN-LAST:event_tableCentroidlevel1MouseClicked
 
     private void tableCentroidlevel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCentroidlevel2MouseClicked
+        
         int index = tableCentroidlevel2.getSelectedRow();
-        TableModel model = tableCentroidlevel2.getModel();
-        indexRowLevel2 = (int) model.getValueAt(index, 0);
+        TableModel MeaningCentroid = tableCentroidlevel1.getModel();
+        TableModel FrequencyCentroid = tableCentroidlevel2.getModel();
+        
+        indexRowLevel2 = (int) FrequencyCentroid.getValueAt(index, 0);
         showtableDetail();
         countClusterLevel2.setText(String.valueOf(indexRowLevel2));
         
+        
+//        String meaning_value = (String) MeaningCentroid.getValueAt(index, 1);
+//        String frequency_value = (String) FrequencyCentroid.getValueAt(index, 1);
+//        
+//        DetailResultCentroid2 rs = new DetailResultCentroid2(indexRowLevel1, meaning_value, indexRowLevel2, frequency_value);
+//        rs.setVisible(true);
     }//GEN-LAST:event_tableCentroidlevel2MouseClicked
 
     private void btnfinish2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfinish2ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnfinish2ActionPerformed
+
+    private void Iteration2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Iteration2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Iteration2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void tableResult2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableResult2MouseClicked
+        int index = tableResult2.getSelectedRow();
+        TableModel model = tableResult2.getModel();
+        
+        int id_model = (int) model.getValueAt(index, 0);
+        String value = (String) model.getValueAt(index, 3);
+        DetailModel2 rs = new DetailModel2(id_model, value);
+        rs.setVisible(true);
+    }//GEN-LAST:event_tableResult2MouseClicked
+
+    private void btnCentroid2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCentroid2ActionPerformed
+        int MeaningItem = tableCentroidlevel1.getRowCount();
+        
+        String frequency = k.centroid.find().next().get("numberOfCluster2").toString();
+        
+        int FrequencyItem = Integer.parseInt(frequency);
+        
+        TableModel MeaningModel = tableCentroidlevel1.getModel();
+        TableModel FrequencyModel = tableCentroidlevel2.getModel();
+
+        DetailResultCentroid2 rs = new DetailResultCentroid2(MeaningItem, MeaningModel, FrequencyItem, FrequencyModel);
+        rs.setVisible(true);
+    }//GEN-LAST:event_btnCentroid2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -497,6 +568,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Iteration2;
+    private javax.swing.JButton btnCentroid2;
     private javax.swing.JButton btnfinish2;
     private javax.swing.JTextField countClusterLevel1;
     private javax.swing.JTextField countClusterLevel2;
@@ -513,7 +585,7 @@ public class JFrameResult2 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tableCentroidlevel1;
     private javax.swing.JTable tableCentroidlevel2;
-    private javax.swing.JTable tableDetaillevel;
+    private javax.swing.JTable tableResult2;
     private javax.swing.JTextField totalModel2;
     // End of variables declaration//GEN-END:variables
 }

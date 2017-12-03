@@ -81,13 +81,16 @@ public class JFrameinsertData extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Doc du lieu");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setText("Tập tin cần đọc:");
+        jLabel2.setText("Thư mục cần đọc:");
 
         jFramePath.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jFramePath.addActionListener(new java.awt.event.ActionListener() {
@@ -256,6 +259,11 @@ public class JFrameinsertData extends javax.swing.JFrame {
     private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnFinishActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
