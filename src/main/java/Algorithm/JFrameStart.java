@@ -271,7 +271,7 @@ public class JFrameStart extends javax.swing.JFrame {
             JFrameResult2 result2 = new JFrameResult2();
             result2.setVisible(true);
         } else {
-            JFrameResult2 result2 = new JFrameResult2();
+            JFrameResult1 result2 = new JFrameResult1();
             result2.setVisible(true);
         }
 

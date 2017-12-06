@@ -249,13 +249,21 @@ public class Kmean{
     		BasicDBObjectBuilder whereVector = BasicDBObjectBuilder.start();
             whereVector.add("meaning_id", cluster.meaning_id + 1);
             DBCursor cursorVector = vector.find(whereVector.get());
+            
             while(cursorVector.hasNext()) {
             	BasicDBObjectBuilder whereModel = BasicDBObjectBuilder.start();
+            	
                 whereModel.add("id_model", cursorVector.next().get("id_model"));
                 DBCursor cursor2 = model.find(whereModel.get());
-
+                // find and insert field meaningvector
+                BasicDBObjectBuilder whereCluster = BasicDBObjectBuilder.start();
+                DBCursor meaningVector = vector.find(whereModel.get());
+                DBCursor frequencyVector = vector.find(whereModel.get());
+                
                 BasicDBObject values = (BasicDBObject) cursor2.next();
                 values.append("meaning_id", cluster.meaning_id + 1);
+                values.append("meaning_vector", meaningVector.next().get("meaning_vector"));
+                values.append("frequency_vector", frequencyVector.next().get("frequency_vector"));
                 clusterCol.insert(values);
             }
     	}
